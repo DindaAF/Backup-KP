@@ -22,6 +22,18 @@ include_once 'header-2.php';
 		$data = mysqli_query($conn, "SELECT * from tbl_atestasimasuk");		
 	}
 ?>
+<?php
+ if(isset($_GET['print'])){
+    if(empty($_GET['dari']) || empty($_GET['ke'])){
+        ?>
+        <script language="JavaScript">
+            alert('Tanggal Awal dan Tanggal Akhir Harap di Isi!');
+            document.location='index.php?menu=laporanmasuk';
+        </script>
+        <?php
+        }
+    }
+?>
 	<div class="container-fluid">
 		<br>
 		<div class="row">
@@ -44,7 +56,7 @@ include_once 'header-2.php';
                     <div class="col-auto">
                         <button class="btn btn-primary" name="cari" value="true" type="submit">Cari</button>
 						<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
-							<a class="btn btn-primary" type="submit" href="<?php echo $url_cetak ?>">Print</a>
+							<a class="btn btn-primary" type="submit" name="print" value="<?php echo $_GET["print"] ?>" href="<?php echo $url_cetak ?>">Print</a>
 						<?php } ?>
                     </div>
                 </div>

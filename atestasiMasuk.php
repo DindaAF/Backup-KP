@@ -143,7 +143,7 @@
 	function ValidateSize(file) {
         var FileSize = file.files[0].size / 1024 / 1024;
         if (FileSize > 2) {
-            alert('File Lebih Dari Batas Naksimum');
+            alert('File Lebih Dari Batas Maksimum');
            $(file).val('');
         } else {
 

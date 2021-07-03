@@ -124,7 +124,7 @@ class UserDaoImpl {
 		$link = PDOUtil::openKoneksi();
 		try {
 			$link->beginTransaction();
-			$query = "INSERT INTO user (id_user,nama,username,password,status,id_role) VALUES (?,?,?,?,?,?)";
+			$query = "INSERT INTO user (id_user,nama,username,password,statusUser,id_role) VALUES (?,?,?,?,?,?)";
 			$stmt = $link->prepare($query);
 			$stmt->bindValue(1, PDO::PARAM_STR);
 			$stmt->bindValue(2,$nama, PDO::PARAM_STR);

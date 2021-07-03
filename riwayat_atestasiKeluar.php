@@ -14,24 +14,6 @@ include_once 'header-2.php';
                     <form method="POST" enctype="multipart/form-data">
                 </div>
     </section>
-    <section class="statistics">
-        <div class="container-fluid">
-            <h3>Upload Bukti Atestasi Keluar</h3><br>
-            <div class="row d-flex">
-                <div class="col-lg-12">
-					<div class="form-group row has-success">
-                        <label class="col-sm-2 form-control-label">Bukti Atestasi</label>
-                        <div class="col-sm-10">
-                            <input type="file" onchange="ValidateSize(this)" class="form-control is-valid" name="buktiAK" accept="image/png, image/jpeg, file/pdf"/>
-                        </div>
-                    </div>
-					<br>
-                    <input type="submit" name="btnSaveBukti" class="btn btn-primary float-right" value="Simpan">
-                </div>
-            </div>
-        </div>
-        </form>
-	</section>
 	<div class="container-fluid">
 		<br><h3>Riwayat Atestasi Keluar</h3><br>
 			<table id="table_id" class="display" style="flex-shrink: 0; width:100%">

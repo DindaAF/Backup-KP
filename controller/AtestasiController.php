@@ -184,25 +184,6 @@ class AtestasiController
             return $msg;
         }
     }
-	
-	private function insertAtestasiMasukM($jemaatNomor, $idAtestasiM, $jemaatTglLahir, $jemaatAyahID, $jemaatAyahNama, $jemaatIbuID, $jemaatIbuNama, $jemaatStatusNikah, $jemaatGender, $jemaatGoldar)
-    {
-        if ($idAtestasiM != "" && $idAtestasiM != NULL) {
-            $addAtestasiMaster = new MasterJemaat();
-			$addAtestasiMasukM->setJemaatNomor($jemaatNomor);
-			$addAtestasiMasukM->setIdAtestasiM($idAtestasiM);
-			$addAtestasiMasukM->setJemaatTglLahir($jemaatTglLahir);
-			$addAtestasiMasukM->setJemaatAyahID($jemaatAyahID);
-			$addAtestasiMasukM->setJemaatAyahNama($jemaatAyahNama);
-			$addAtestasiMasukM->setJemaatIbuID($jemaatIbuID);
-			$addAtestasiMasukM->setJemaatIbuNama($jemaatIbuNama);
-			$addAtestasiMasukM->setJemaatStatusNikah($jemaatStatusNikah);
-			$addAtestasiMasukM->setJemaatGender($jemaatGender);
-			$addAtestasiMasukM->setJemaatGoldar($jemaatGoldar);
-            $msg = $this->masterJemaatDaoImplement->insertMaster($addAtestasiMasukM);
-            return $msg;
-        }
-    }
 
     private function uploadImage($file)
     {
@@ -291,7 +272,7 @@ class AtestasiController
             $idPenyetuju = $_SESSION['userid'];
             $tanggal = date("Y-m-d H:i:s");
             $status = "Disetujui";
-            $statusJemaat = "Aktif";
+            $statusJemaat = "Non";
             $this->atestasiDaoImplement->SetujuiAtestasiKeluar($idAtestasiK,$idPenyetuju,$tanggal,$status,$statusJemaat);
         }
 		if(isset($btnCancel)){
@@ -299,7 +280,7 @@ class AtestasiController
             $idPenyetuju = $_SESSION['userid'];
             $tanggal = date("Y-m-d H:i:s");
             $status = "Belum Disetujui";
-			$statusJemaat = "Non";
+			$statusJemaat = "-";
             $this->atestasiDaoImplement->CancelAtestasiKeluar($idAtestasiK,$idPenyetuju,$tanggal,$status, $statusJemaat);
 		}
 		if(isset($btnAktif)){

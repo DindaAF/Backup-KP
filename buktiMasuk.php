@@ -22,7 +22,7 @@ include_once 'header-2.php';
 					<div class="form-group row has-success">
                         <label class="col-sm-2 form-control-label">Bukti Atestasi</label>
                         <div class="col-sm-10">
-                            <input type="file" onchange="ValidateSize(this)" class="form-control is-valid" name="buktiAM" accept="image/png, image/jpeg, file/pdf"/>
+                            <input type="file" name="buktiAM" onchange="ValidateSize(this)" class="form-control is-valid" name="buktiAM" accept="image/png, image/jpeg, file/pdf"/>
                         </div>
                     </div>
 					<br>

@@ -113,16 +113,6 @@ class AtestasiDaoImpl {
 		return $stmt;
 	}
 	
-	public function fetchDataAtestasiKeluar($atestasi){
-		$link = PDOUtil::openKoneksi();
-		$query = "SELECT * FROM tbl_atestasikeluar WHERE idAtestasiK = ? order by tglPengajuan DESC";
-		$stmt = $link->prepare($query);
-		$stmt->bindParam(1,$atestasi);
-		$stmt->setFetchMode(PDO::FETCH_OBJ);
-		$stmt->execute();
-		PDOUtil::closeKoneksi($link);
-		return $stmt->fetchObject('AtestasiKeluar');
-	}
 	
 	public function fetchAtestasi(){
 		$link = PDOUtil::openKoneksi();
@@ -130,38 +120,6 @@ class AtestasiDaoImpl {
 			$query = "SELECT tbl_atestasimasuk.*, user.*, pengaju.id_user as id_user_pengaju, pengaju.nama as nama_pengaju, pengaju.username as username_pengaju, pengaju.id_role as id_role_pengaju FROM tbl_atestasimasuk LEFT JOIN user ON tbl_atestasimasuk.id_user = user.id_user LEFT JOIN user pengaju ON tbl_atestasimasuk.noAtestasi = pengaju.username";
 			$stmt = $link->prepare($query);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
-            $stmt->execute();
-        } catch (PDOException $er) {
-            echo $er->getMessage();
-            die();
-		}
-		PDOUtil::closeKoneksi($link);
-		return $stmt;
-	}
-	
-	public function listTurutPindah($username){
-		$link = PDOUtil::openKoneksi();
-		try {
-			$query = "SELECT tbl_atestasimasuk.*, user.*, pengaju.id_user as id_user_pengaju, pengaju.nama as nama_pengaju, pengaju.username as username_pengaju, pengaju.id_role as id_role_pengaju FROM tbl_atestasimasuk JOIN user ON tbl_atestasimasuk.id_user = user.id_user JOIN user pengaju ON tbl_atestasimasuk.noAtestasi = pengaju.username WHERE noAtestasi != ?";
-			$stmt = $link->prepare($query);
-		$stmt->bindParam(1,$username);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
-            $stmt->execute();
-        } catch (PDOException $er) {
-            echo $er->getMessage();
-            die();
-		}
-		PDOUtil::closeKoneksi($link);
-		return $stmt;
-	}
-	
-	public function getPengajuanKeluarByIdJemaat($id_jemaat){
-		$link = PDOUtil::openKoneksi();
-		try {
-			$query = "SELECT * FROM tbl_atestasikeluar JOIN user ON tbl_atestasikeluar.id_user = user.id_user JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat WHERE tbl_atestasikeluar.id_jemaat = ?";
-			$stmt = $link->prepare($query);
-		$stmt->bindParam(1,$id_jemaat);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiKeluar');
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();
@@ -273,7 +231,110 @@ class AtestasiDaoImpl {
         PDOUtil::closeKoneksi($link);
         return $msg;
 	}
+
+	public function fetchSelectUser($idAtestasiM){
+		$link = PDOUtil::openKoneksi();
+		try {
+			$link->beginTransaction();
+			$query = "SELECT * FROM tbl_atestasimasuk WHERE idAtestasiM = ?";
+			$stmt = $link->prepare($query);
+			$stmt->bindParam(1,$idAtestasiM);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
+			$stmt->execute();
+			$msg = $stmt;
+			$link->commit();
+        } catch (PDOException $er) {
+            $link->rollBack();
+            echo $er->getMessage();
+            die();
+        }
+        PDOUtil::closeKoneksi($link);
+        return $msg;
+	}
 	
+	public function fetchSelectUserKeluar($idAtestasiK){
+		$link = PDOUtil::openKoneksi();
+		try {
+			$link->beginTransaction();
+			$query = "SELECT * FROM tbl_atestasikeluar WHERE idAtestasiK = ?";
+			$stmt = $link->prepare($query);
+			$stmt->bindParam(1,$idAtestasiK);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiKeluar');
+			$stmt->execute();
+			$msg = $stmt;
+			$link->commit();
+        } catch (PDOException $er) {
+            $link->rollBack();
+            echo $er->getMessage();
+            die();
+        }
+        PDOUtil::closeKoneksi($link);
+        return $msg;
+	}
+	
+	public function getOneAM($noAtestasi){
+		$link = PDOUtil::openKoneksi();
+		try {
+			$link->beginTransaction();
+			$query = "SELECT * FROM tbl_atestasimasuk WHERE substring(noAtestasi,1,6) = ? ORDER BY idAtestasiM DESC LIMIT 1 ";
+			$stmt = $link->prepare($query);
+			$stmt->bindParam(1,$noAtestasi);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
+			$stmt->execute();
+			$msg = $stmt;
+			$link->commit();
+        } catch (PDOException $er) {
+            $link->rollBack();
+            echo $er->getMessage();
+            die();
+        }
+        PDOUtil::closeKoneksi($link);
+        return $msg;
+	}
+
+	public function fetchDataAtestasiKeluar($atestasi){
+		$link = PDOUtil::openKoneksi();
+		$query = "SELECT * FROM tbl_atestasikeluar WHERE idAtestasiK = ? order by tglPengajuan DESC";
+		$stmt = $link->prepare($query);
+		$stmt->bindParam(1,$atestasi);
+		$stmt->setFetchMode(PDO::FETCH_OBJ);
+		$stmt->execute();
+		PDOUtil::closeKoneksi($link);
+		return $stmt->fetchObject('AtestasiKeluar');
+	}
+
+	public function listTurutPindah($username){
+		$link = PDOUtil::openKoneksi();
+		try {
+			$query = "SELECT tbl_atestasimasuk.*, user.*, pengaju.id_user as id_user_pengaju, pengaju.nama as nama_pengaju, pengaju.username as username_pengaju, pengaju.id_role as id_role_pengaju FROM tbl_atestasimasuk JOIN user ON tbl_atestasimasuk.id_user = user.id_user JOIN user pengaju ON tbl_atestasimasuk.noAtestasi = pengaju.username WHERE noAtestasi != ?";
+			$stmt = $link->prepare($query);
+		$stmt->bindParam(1,$username);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
+            $stmt->execute();
+        } catch (PDOException $er) {
+            echo $er->getMessage();
+            die();
+		}
+		PDOUtil::closeKoneksi($link);
+		return $stmt;
+	}
+
+	public function getPengajuanKeluarByIdJemaat($id_jemaat){
+		$link = PDOUtil::openKoneksi();
+		try {
+			$query = "SELECT * FROM tbl_atestasikeluar JOIN user ON tbl_atestasikeluar.id_user = user.id_user JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat WHERE tbl_atestasikeluar.id_jemaat = ?";
+			$stmt = $link->prepare($query);
+		$stmt->bindParam(1,$id_jemaat);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiKeluar');
+            $stmt->execute();
+        } catch (PDOException $er) {
+            echo $er->getMessage();
+            die();
+		}
+		PDOUtil::closeKoneksi($link);
+		return $stmt;
+	}
+
 	public function StatusJemaatAM($idMasuk,$statusJemaat){
 		$link = PDOUtil::openKoneksi();
 		try {
@@ -304,26 +365,6 @@ class AtestasiDaoImpl {
 			$stmt->bindValue(2,$idKeluar, PDO::PARAM_STR);
 			$stmt->execute();
 			$msg = 'sukses';
-			$link->commit();
-        } catch (PDOException $er) {
-            $link->rollBack();
-            echo $er->getMessage();
-            die();
-        }
-        PDOUtil::closeKoneksi($link);
-        return $msg;
-	}
-	
-	public function getOneAM($noAtestasi){
-		$link = PDOUtil::openKoneksi();
-		try {
-			$link->beginTransaction();
-			$query = "SELECT * FROM tbl_atestasimasuk WHERE substring(noAtestasi,1,6) = ? ORDER BY idAtestasiM DESC LIMIT 1 ";
-			$stmt = $link->prepare($query);
-			$stmt->bindParam(1,$noAtestasi);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
-			$stmt->execute();
-			$msg = $stmt;
 			$link->commit();
         } catch (PDOException $er) {
             $link->rollBack();
@@ -396,43 +437,5 @@ class AtestasiDaoImpl {
         return $msg;
 	}
 	
-	public function fetchSelectUser($idAtestasiM){
-		$link = PDOUtil::openKoneksi();
-		try {
-			$link->beginTransaction();
-			$query = "SELECT * FROM tbl_atestasimasuk WHERE idAtestasiM = ?";
-			$stmt = $link->prepare($query);
-			$stmt->bindParam(1,$idAtestasiM);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiMasuk');
-			$stmt->execute();
-			$msg = $stmt;
-			$link->commit();
-        } catch (PDOException $er) {
-            $link->rollBack();
-            echo $er->getMessage();
-            die();
-        }
-        PDOUtil::closeKoneksi($link);
-        return $msg;
-	}
 	
-	public function fetchSelectUserKeluar($idAtestasiK){
-		$link = PDOUtil::openKoneksi();
-		try {
-			$link->beginTransaction();
-			$query = "SELECT * FROM tbl_atestasikeluar WHERE idAtestasiK = ?";
-			$stmt = $link->prepare($query);
-			$stmt->bindParam(1,$idAtestasiK);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AtestasiKeluar');
-			$stmt->execute();
-			$msg = $stmt;
-			$link->commit();
-        } catch (PDOException $er) {
-            $link->rollBack();
-            echo $er->getMessage();
-            die();
-        }
-        PDOUtil::closeKoneksi($link);
-        return $msg;
-	}
 }

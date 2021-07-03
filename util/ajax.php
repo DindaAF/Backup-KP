@@ -147,7 +147,7 @@
 				</tr>
 				<tr>
 					<td width="25%"><b>Bukti Atestasi</b> </td>
-					<td width="25%"><a href="'.$results->getBuktiAM().'">Download</td>
+					<td width="25%"><a href="'.$results->getBuktiAM().'">Lihat</td>
 				</tr>
 		'; 
 		$response .= '</table></div>
@@ -227,6 +227,10 @@
 				<tr>
 					<td width="30%"><b>Status</b></td>
 					<td width="70%">'.$results->getStatus().'</td>
+				</tr>
+				<tr>
+					<td width="30%"><b>Status</b></td>
+					<td width="70%">'.$results->getStatusJemaat().'</td>
 				</tr>
 		'; 
 		$response .= '</table></div>';  

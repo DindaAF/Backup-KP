@@ -9,7 +9,7 @@ class User {
 	private $id_role;
 	private $role;
     private $foto;
-    private $status;
+    private $statusUser;
     
 	public function __construct(){		
 	}
@@ -56,7 +56,7 @@ class User {
 	/**
 	* @return mixed
 	*/
-    function getStatus() {
+    function getStatusUser() {
         return $this->nama;
     }
 	
@@ -94,8 +94,8 @@ class User {
 	/**
 	* @param mixed $status
 	*/
-    function setStatus($status) {
-        $this->status = $status;
+    function setStatusUser($statusUser) {
+        $this->statusUser = $statusUser;
     }
 	/**
 	* @param mixed $id_role
