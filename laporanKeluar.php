@@ -15,12 +15,6 @@ include_once 'header-2.php';
     $username       = "root";
     $password       = "";
     $conn = mysqli_connect($servername, $username, $password, $database);
-	if(isset($_GET['dari']) && isset($_GET['ke'])){
-		$data = mysqli_query($conn,"SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
-		$url_cetak = "printKeluar.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
-	}else{
-		$data = mysqli_query($conn, "SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user");		
-	}
 ?>
 	<div class="container-fluid">
 		<br>
@@ -43,18 +37,36 @@ include_once 'header-2.php';
                     </div>
                     <div class="col-auto">
                         <button class="btn btn-primary" name="cari" value="true" type="submit">Cari</button>
-                        <a class="btn btn-primary" type="submit" href="<?php echo $url_cetak ?>">Print</a>
                     </div>
                 </div>
 			</div>
 		</div>
         </form>
+		<?php
+        $servername     = "localhost";
+		$database       = "gereja";
+		$username       = "root";
+		$password       = "";
+		$conn = mysqli_connect($servername, $username, $password, $database);
+
+        if(empty($_GET['dari']) or empty($_GET['ke'])){ 
+            $query = "SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user";
+            $url_cetak = "printKeluar.php";
+        }else{
+            $query = "SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user WHERE (tglPengajuan BETWEEN '".$_GET['dari']."' AND '".$_GET['ke']."')";
+            $url_cetak = "printKeluar.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
+        }
+        ?>
+		<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
+			<div style="margin-top: 5px;">
+				<a class="btn btn-primary" name="print" href="<?php echo $url_cetak ?>">Print</a>
+			</div>
+		<?php } ?>
 		<div class="row mt-3">
             <div class="col-md-12">
 			<table id="table_id" class="table table-striped">
 				<thead>
 					<tr>
-						<th>Nomor</th>
 						<th>Nomor Atestasi</th>
 						<th>Tanggal Pengajuan</th>
 						<th>Status</th>
@@ -63,17 +75,21 @@ include_once 'header-2.php';
 				</thead>
 				<tbody>
 				<?php
-					$no = 1;
-					while($d = mysqli_fetch_array($data)){
+                    $sql = mysqli_query($conn, $query);
+                    $row = mysqli_num_rows($sql);
+                    if($row > 0){ // Jika jumlah data lebih dari 0 (Berarti jika data ada)
+                        while($d = mysqli_fetch_array($sql)){
+                            echo "<tr>";
+                            echo "<td>".$d['noAtestasi']."</td>";
+							echo "<td>".date_format(date_create($d['tglPengajuan']), 'd-M-Y')."</td>";
+                            echo "<td>".$d['status']."</td>";
+                            echo "<td>".$d['jemaatAlamatBaru']."</td>";
+                            echo "</tr>";
+                        }
+                    }else{ // Jika data tidak ada
+                        echo "<tr><td colspan='5'>Data tidak ada</td></tr>";
+                    }
                 ?>
-                    <tr>
-                        <td><?php echo $no++; ?></td>
-						<td><?php echo $d['noAtestasi']; ?></td>
-                        <td><?php echo date_format(date_create($d['tglPengajuan']), 'd-M-Y'); ?></td>
-                        <td><?php echo $d['status']; ?></td>
-                        <td><?php echo $d['jemaatAlamatBaru']; ?></td>
-                    </tr>
-                <?php } ?>
 				</tbody>
 			</table>
 		</div>

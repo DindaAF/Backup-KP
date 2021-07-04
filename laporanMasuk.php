@@ -9,33 +9,6 @@ include_once 'header-2.php';
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
-<?php 
-    $servername     = "localhost";
-    $database       = "gereja";
-    $username       = "root";
-    $password       = "";
-    $conn = mysqli_connect($servername, $username, $password, $database);
-	
-	
-	if(isset($_GET['dari']) && isset($_GET['ke'])){
-		$data = mysqli_query($conn, "SELECT * FROM tbl_atestasimasuk WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
-		$url_cetak = "print.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
-	}else{
-		$data = mysqli_query($conn, "SELECT * from tbl_atestasimasuk");		
-	}
-?>
-<?php
- if(isset($url_cetak)){
-    if(empty($_GET['dari']) || empty($_GET['ke'])){
-        ?>
-        <script language="JavaScript">
-            alert('Tanggal Awal dan Tanggal Akhir Harap di Isi!');
-            document.location='index.php?menu=laporanmasuk';
-        </script>
-        <?php
-        }
-    }
-?>
 	<div class="container-fluid">
 		<br>
 		<div class="row">
@@ -57,20 +30,36 @@ include_once 'header-2.php';
                     </div>
                     <div class="col-auto">
                         <button class="btn btn-primary" name="cari" value="true" type="submit">Cari</button>
-						<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
-							<a class="btn btn-primary" name="print" href="<?php echo $url_cetak ?>">Print</a>
-						<?php } ?>
                     </div>
                 </div>
 			</div>
 		</div>
         </form>
+		<?php
+        $servername     = "localhost";
+		$database       = "gereja";
+		$username       = "root";
+		$password       = "";
+		$conn = mysqli_connect($servername, $username, $password, $database);
+
+        if(empty($_GET['dari']) or empty($_GET['ke'])){ 
+            $query = "SELECT * from tbl_atestasimasuk";
+            $url_cetak = "print.php";
+        }else{
+            $query = "SELECT * FROM tbl_atestasimasuk WHERE (tglPengajuan BETWEEN '".$_GET['dari']."' AND '".$_GET['ke']."')";
+            $url_cetak = "print.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
+        }
+        ?>
+		<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
+			<div style="margin-top: 5px;">
+				<a class="btn btn-primary" name="print" href="<?php echo $url_cetak ?>">Print</a>
+			</div>
+		<?php } ?>
 		<div class="row mt-3">
             <div class="col-md-12">
 			<table id="table_id" class="table table-striped">
 				<thead>
 					<tr>
-						<th>Nomor</th>
 						<th>Tanggal Pengajuan</th>
 						<th>Nama Lengkap</th>
 						<th>Status</th>
@@ -79,17 +68,22 @@ include_once 'header-2.php';
 				</thead>
 				<tbody>
 				<?php
-					$no = 1;
-					while($d = mysqli_fetch_array($data)){
+                    $sql = mysqli_query($conn, $query);
+                    $row = mysqli_num_rows($sql);
+                    if($row > 0){ // Jika jumlah data lebih dari 0 (Berarti jika data ada)
+                        while($d = mysqli_fetch_array($sql)){
+                            echo "<tr>";
+                            echo "<td>".date_format(date_create($d['tglPengajuan']), 'd-M-Y')."</td>";
+                            echo "<td>".$d['namaLengkap']."</td>";
+                            echo "<td>".$d['status']."</td>";
+                            echo "<td>".$d['gerejaAsal']."</td>";
+                            echo "</tr>";
+                        }
+                    }else{ // Jika data tidak ada
+                        echo "<tr><td colspan='5'>Data tidak ada</td></tr>";
+                    }
                 ?>
-                    <tr>
-                        <td><?php echo $no++; ?></td>
-                        <td><?php echo date_format(date_create($d['tglPengajuan']), 'd-M-Y'); ?></td>
-                        <td><?php echo $d['namaLengkap']; ?></td>
-                        <td><?php echo $d['status']; ?></td>
-                        <td><?php echo $d['gerejaAsal']; ?></td>
-                    </tr>
-                <?php } ?>
+				
 				</tbody>
 			</table>
 		</div>

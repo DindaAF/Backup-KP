@@ -25,9 +25,7 @@
   $password       = "";
   $conn = mysqli_connect($servername, $username, $password, $database);
 
-  $dari = $_GET['dari']; 
-  $ke = $_GET['ke'];
-  if(empty($dari) or empty($ke)){ 
+  if(empty($_GET['dari']) or empty($_GET['ke'])){ 
     $query = "SELECT * FROM tbl_atestasimasuk";
   }else{ 
     $query = mysqli_query($conn, "SELECT * FROM tbl_atestasimasuk WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
