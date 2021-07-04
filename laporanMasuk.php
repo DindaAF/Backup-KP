@@ -15,6 +15,8 @@ include_once 'header-2.php';
     $username       = "root";
     $password       = "";
     $conn = mysqli_connect($servername, $username, $password, $database);
+	
+	
 	if(isset($_GET['dari']) && isset($_GET['ke'])){
 		$data = mysqli_query($conn, "SELECT * FROM tbl_atestasimasuk WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
 		$url_cetak = "print.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
@@ -23,7 +25,7 @@ include_once 'header-2.php';
 	}
 ?>
 <?php
- if(isset($_GET['print'])){
+ if(isset($url_cetak)){
     if(empty($_GET['dari']) || empty($_GET['ke'])){
         ?>
         <script language="JavaScript">
@@ -56,7 +58,7 @@ include_once 'header-2.php';
                     <div class="col-auto">
                         <button class="btn btn-primary" name="cari" value="true" type="submit">Cari</button>
 						<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
-							<a class="btn btn-primary" type="submit" name="print" value="<?php echo $_GET["print"] ?>" href="<?php echo $url_cetak ?>">Print</a>
+							<a class="btn btn-primary" name="print" href="<?php echo $url_cetak ?>">Print</a>
 						<?php } ?>
                     </div>
                 </div>

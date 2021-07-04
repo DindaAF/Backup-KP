@@ -16,10 +16,10 @@ include_once 'header-2.php';
     $password       = "";
     $conn = mysqli_connect($servername, $username, $password, $database);
 	if(isset($_GET['dari']) && isset($_GET['ke'])){
-		$data = mysqli_query($conn, "SELECT * FROM tbl_atestasikeluar WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
+		$data = mysqli_query($conn,"SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user WHERE tglPengajuan BETWEEN '".$_GET['dari']."' and '".$_GET['ke']."'");
 		$url_cetak = "printKeluar.php?dari=".$_GET['dari']."&ke=".$_GET['ke']."&cari=true";
 	}else{
-		$data = mysqli_query($conn, "SELECT * from tbl_atestasikeluar");		
+		$data = mysqli_query($conn, "SELECT tbl_atestasikeluar.*, user.*, tbl_masterjemaat.*, tbl_gereja.id_gereja, tbl_gereja.nama AS nama_gereja, jemaat.id_user AS id_user_jemaat, jemaat.nama AS nama_jemaat, jemaat.username AS username_jemaat, jemaat.id_role AS id_role_jemaat FROM tbl_atestasikeluar LEFT JOIN user ON tbl_atestasikeluar.id_user = user.id_user LEFT JOIN tbl_gereja ON tbl_atestasikeluar.id_gereja = tbl_gereja.id_gereja LEFT JOIN tbl_masterjemaat ON tbl_atestasikeluar.id_jemaat = tbl_masterjemaat.id_jemaat LEFT JOIN user jemaat ON tbl_masterjemaat.iduser = jemaat.id_user");		
 	}
 ?>
 	<div class="container-fluid">
