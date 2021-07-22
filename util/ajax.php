@@ -213,7 +213,7 @@
 					<td width="70%">'.$results->getJemaat()->getNama().'</td>
 				</tr>
 				<tr>
-					<td width="30%"><b>Nama Lengkap</b></td>
+					<td width="30%"><b>Alamat Baru</b></td>
 					<td width="70%">'.$results->getJemaatAlamatBaru().'</td>
 				</tr>
 				<tr>
@@ -229,7 +229,7 @@
 					<td width="70%">'.$results->getStatus().'</td>
 				</tr>
 				<tr>
-					<td width="30%"><b>Status</b></td>
+					<td width="30%"><b>Status Jemaat</b></td>
 					<td width="70%">'.$results->getStatusJemaat().'</td>
 				</tr>
 		'; 

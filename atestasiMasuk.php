@@ -129,10 +129,10 @@
                 const file = Math.round((fsize / 1024));
                 if (file >= 4096) {
                     alert(
-                      "File terlalu besar, pilih file kurang dari 4mb");
+                      "File terlalu besar");
                 } else if (file < 2048) {
                     alert(
-                      "File terlalu kecil, pilih file yang lebih besar dari 2mb");
+                      "File terlalu kecil");
                 } else {
                     document.getElementById('size').innerHTML = '<b>'
                     + file + '</b> KB';

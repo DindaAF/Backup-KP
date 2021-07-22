@@ -192,7 +192,7 @@ class AtestasiController
         $ukuran = $file['size'];
         $tipe = pathinfo($namafile, PATHINFO_EXTENSION);
         if ($namafile != NULL) {
-            if ($tipe == 'png' || $tipe == 'PNG' || $tipe == 'jpg' || $tipe == 'gif' || $tipe == 'jpeg' || $tipe == 'pdf') {
+            if ($tipe == 'png' || $tipe == 'PNG' || $tipe == 'jpg' || $tipe == 'jpeg' || $tipe == 'pdf') {
                 $alamat = 'picture/' . $namafile;
                 move_uploaded_file($lokasi, $alamat);
                 return $alamat;
@@ -208,7 +208,7 @@ class AtestasiController
         $ukuran = $file['size'][$index];
         $tipe = pathinfo($namafile, PATHINFO_EXTENSION);
         if ($namafile != NULL) {
-            if ($tipe == 'png' || $tipe == 'PNG' || $tipe == 'jpg' || $tipe == 'gif' || $tipe == 'jpeg' || $tipe == 'pdf') {
+            if ($tipe == 'png' || $tipe == 'PNG' || $tipe == 'jpg' || $tipe == 'jpeg' || $tipe == 'pdf') {
                 $alamat = 'picture/' . $namafile;
                 move_uploaded_file($lokasi, $alamat);
                 return $alamat;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 03 Jul 2021 pada 15.51
+-- Waktu pembuatan: 21 Jul 2021 pada 15.24
 -- Versi server: 10.1.38-MariaDB
 -- Versi PHP: 7.3.2
 
@@ -86,6 +86,13 @@ CREATE TABLE `tbl_atestasikeluar` (
   `buktiAK` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `tbl_atestasikeluar`
+--
+
+INSERT INTO `tbl_atestasikeluar` (`idAtestasiK`, `noAtestasi`, `tglPengajuan`, `id_jemaat`, `jemaatAlamatBaru`, `id_gereja`, `namaGereja`, `alamatGereja`, `alasan`, `status`, `statusJemaat`, `id_user`, `tgl_Persetujuan`, `buktiAK`) VALUES
+(1, '2107070100', '2021-07-07', 2, 'Jl Kelinci', '10', '', '', 'Pekerjaan', 'Disetujui', 'Non', 'USR00003', '2021-07-07', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -112,6 +119,15 @@ CREATE TABLE `tbl_atestasimasuk` (
   `statusJemaat` varchar(20) NOT NULL,
   `buktiAM` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `tbl_atestasimasuk`
+--
+
+INSERT INTO `tbl_atestasimasuk` (`idAtestasiM`, `noAtestasi`, `tglPengajuan`, `namaLengkap`, `alamat`, `email`, `noTelp`, `noWA`, `agama`, `gerejaAsal`, `status`, `pasFoto`, `scanAkteBaptisSidi`, `suratKeterangan`, `tgl_Persetujuan`, `id_user`, `statusJemaat`, `buktiAM`) VALUES
+(1, '2107030100', '2021-07-03', 'Marta', 'Jl Pahlawan', 'martha@gmail.com', '087234567321', '087234567321', 'Kristen', 'GKI Jakarta', 'Disetujui', 'picture/ContohFoto.png', 'picture/contohSuratAM.png', 'picture/contohSuratSidi.jpg', '2021-07-03', 'USR00003', 'Aktif', 'picture/93sample-bootstrap.pdf'),
+(2, '2107070100', '2021-07-07', 'Justin', 'Jl Jawa Bandung', 'justin@gmail.com', '087324567321', '087324567321', 'Kristen', 'GKI Cibunut', 'Disetujui', 'picture/ContohFoto.png', 'picture/IMG_20200109_140358_6.jpg', 'picture/contoh surat2.jpg', '2021-07-07', 'USR00003', 'Aktif', NULL),
+(3, '2107120100', '2021-07-12', 'Michelle', 'Yogyakarta', 'michel@gmail.com', '082543615721', '082543615721', 'Kristen', 'GKI Yogyakarta', 'Belum Disetujui', 'picture/ContohFoto.png', 'picture/contoh surat2.jpg', 'picture/contohSuratSidi.jpg', '0000-00-00', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -217,6 +233,14 @@ CREATE TABLE `tbl_masterjemaat` (
   `iduser` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `tbl_masterjemaat`
+--
+
+INSERT INTO `tbl_masterjemaat` (`id_jemaat`, `jemaatNomor`, `idAtestasiM`, `jemaatTglLahir`, `jemaatAyahID`, `jemaatAyahNama`, `jemaatIbuID`, `jemaatIbuNama`, `jemaatStatusNikah`, `jemaatGender`, `jemaatGoldar`, `jemaatKeanggotaan`, `iduser`) VALUES
+(1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'USR00005'),
+(2, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'USR00006');
+
 -- --------------------------------------------------------
 
 --
@@ -241,7 +265,9 @@ INSERT INTO `user` (`id_user`, `nama`, `username`, `password`, `foto`, `statusUs
 ('USR00001', 'Amir', 'admin', '21232f297a57a5a743894a0e4a801fc3', NULL, 'Aktif', 'ad'),
 ('USR00002', 'James', 'kw', '6ae36186a6c97b017319bc5ec47fe5d0', NULL, 'Aktif', 'kw'),
 ('USR00003', 'Made', 'majelis', '6375d4cda4127202fb101f21daca5175', NULL, 'Aktif', 'mj'),
-('USR00004', 'Jessica', 'tata usaha', '4301c7a3297ae3928e22129fea253fa9', NULL, 'Aktif', 'tu');
+('USR00004', 'Jessica', 'tata usaha', '4301c7a3297ae3928e22129fea253fa9', NULL, 'Aktif', 'tu'),
+('USR00005', 'Marta', '2107030100', 'f6473c16da840038fcee41374013f964', NULL, 'Aktif', 'jem'),
+('USR00006', 'Justin', '2107070100', 'f6473c16da840038fcee41374013f964', NULL, 'Aktif', 'jem');
 
 --
 -- Trigger `user`
@@ -342,13 +368,13 @@ ALTER TABLE `role_kematian`
 -- AUTO_INCREMENT untuk tabel `tbl_atestasikeluar`
 --
 ALTER TABLE `tbl_atestasikeluar`
-  MODIFY `idAtestasiK` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idAtestasiK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_atestasimasuk`
 --
 ALTER TABLE `tbl_atestasimasuk`
-  MODIFY `idAtestasiM` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idAtestasiM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_kelahiran`
@@ -366,7 +392,7 @@ ALTER TABLE `tbl_kematian`
 -- AUTO_INCREMENT untuk tabel `tbl_masterjemaat`
 --
 ALTER TABLE `tbl_masterjemaat`
-  MODIFY `id_jemaat` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jemaat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

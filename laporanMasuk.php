@@ -20,7 +20,7 @@ include_once 'header-2.php';
                         <label class="col-form-label">Tanggal</label>
                     </div>
                     <div class="col-auto">
-                        <input type="date" class="form-control" name="dari" value="<?php echo $_GET["dari"] ?>" required>
+                        <input type="date" class="form-control" name="dari" value="<?php echo date("Y-m-d"); ?>" required>
                     </div>
                     <div class="col-auto">
                         -
@@ -64,6 +64,7 @@ include_once 'header-2.php';
 						<th>Nama Lengkap</th>
 						<th>Status</th>
 						<th>Asal Gereja</th>
+						<th>Detail</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -77,6 +78,9 @@ include_once 'header-2.php';
                             echo "<td>".$d['namaLengkap']."</td>";
                             echo "<td>".$d['status']."</td>";
                             echo "<td>".$d['gerejaAsal']."</td>";
+							echo '<td>';
+							echo '<button class="detail_atestasi btn btn-outline-info btn-sm" data-id="'. $d['idAtestasiM'] .'">Lihat</button> ';
+							echo '</td>';
                             echo "</tr>";
                         }
                     }else{ // Jika data tidak ada
@@ -93,7 +97,7 @@ include_once 'header-2.php';
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-body">
@@ -107,6 +111,18 @@ include_once 'header-2.php';
  <script>
 $(document).ready( function () {
     $('#table_id').DataTable();
+	$(".detail_atestasi").click(function(){
+       var atestasi = $(this).attr("data-id");   
+       $.ajax({
+            url: "./util/ajax.php",
+            type: "POST",
+            data: {atestasi: atestasi},
+            success: function(response) {
+               $('.modal-body').html(response);
+			   $('#myModal').modal('show'); 
+           }
+         }); 
+     });
 } );
 </script>
 <?php include 'footer-2.php'; ?>

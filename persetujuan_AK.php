@@ -14,6 +14,7 @@ include_once 'header-2.php';
 					<tr>
 						<th>Tanggal Pengajuan</th>
 						<th>Nama Lengkap</th>
+						<th>Status</th>
 						<?php if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){ ?>
 							<th>Tanggal Persetujuan</th>
 							<th>Disetujui Oleh</th>
@@ -29,6 +30,12 @@ include_once 'header-2.php';
 						echo '<tr>';
 						echo '<td>' . date_format(date_create( $row->getTglPengajuan()), 'd-M-Y') . '</td>';
 						echo '<td>' . $row->getJemaat()->getNama() . '</td>';
+						if($row->getStatus() == "Disetujui"){
+							echo '<td bgcolor="#ADFF2F">' . $row->getStatus() . '</td>';
+						}
+						else{
+							echo '<td bgcolor="#FF4500">' . $row->getStatus() . '</td>';
+						}
 						if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){
 							echo '<td>' . date_format(date_create($row->getTglPersetujuan()), 'd-M-Y') . '</td>';
 							echo '<td>' . $row->getUser()->getNama() . '</td>';

@@ -32,7 +32,12 @@ include_once 'header-2.php';
 						echo '<td>' . date_format(date_create( $row->getTglPengajuan()), 'd-M-Y') . '</td>';
 						echo '<td>' . $row->getNamaLengkap() . '</td>';
 						echo '<td>' . $row->getGerejaAsal() . '</td>';
-						echo '<td>' . $row->getStatus() . '</td>';
+						if($row->getStatus() == "Disetujui"){
+							echo '<td bgcolor="#ADFF2F">' . $row->getStatus() . '</td>';
+						}
+						else{
+							echo '<td bgcolor="#FF4500">' . $row->getStatus() . '</td>';
+						}
 						if (isset($_SESSION['role']) && $_SESSION['role']!= "majelis" ){
 							echo '<td>' . date_format(date_create($row->getTglPersetujuan()), 'd-M-Y') . '</td>';
 							echo '<td>' . $row->getUser()->getNama() . '</td>';
